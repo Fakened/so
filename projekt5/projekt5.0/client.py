@@ -26,8 +26,8 @@ while True:
     temp = input()
     message +=' '+temp
     message += ' '*(MAX-(len(message)))
-    asd = write(serverFd, message.encode())
+    write(serverFd, message.encode())
     clientFd = os.open(clientFifoName, O_RDONLY)
-    temp = read(clientFd, 100000)
+    temp = read(clientFd, MAX)
     print(temp.decode("utf-8"))
     close(clientFd)

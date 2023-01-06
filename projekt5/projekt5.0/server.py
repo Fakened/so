@@ -32,6 +32,7 @@ while True:
     for i in range (1, len(temp)):
         message += temp[i] + ' '
     message = message.upper()
+    message += ' '*(MAX-(len(message)))
     fd = os.open(clientName,  O_WRONLY)
     os.write(fd, message.encode())
     close(serverFifo)
