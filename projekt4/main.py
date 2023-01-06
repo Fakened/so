@@ -54,6 +54,7 @@ for i in range(producer):
         try:
             close(r)
             dup2(w, 3)
+            close(w)
             execl('producer.py', ' ', chars)
         except Exception as e:
             print(name+": ", end = "")
@@ -79,6 +80,7 @@ for i in range(consumer):
     if pid == 0:
         try:
             dup2(r, 4)
+            close(r)
             execl('consumer.py', ' ')
         except Exception as e:
             print(name+": ", end = "")
