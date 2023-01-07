@@ -1,8 +1,8 @@
 #!/bin/bash
 i=0
-while [ $i -lt 6 ]
+while [ $i -lt 1 ]
 do
-    echo "ala\nma\nkota\ni psa\nmalego\n" | ./client.py&
+    echo -e "ala\nma\nkota\ni psa \n       malego" | ./client.py&
     i=$((i+1))
     
 done

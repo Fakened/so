@@ -31,16 +31,20 @@ try:
         if len(temp) == 0:
             break
         temp = temp.decode("utf-8")
-        temp = (temp.replace('[]', '')).split()
+        temp = (temp.replace("[", '', 1))
+        temp = (temp.replace("]", '', -1)).split(', ')
+        temp[0] = temp[0].replace("'", '')
+        temp[1] = temp[1].replace("'", '', 1)
+        temp[1] = temp[1].replace("'", '', -1)
         clientName = temp[0]
-        message = ''
-        for i in range (1, len(temp)):
-            message += temp[i] + ' '
+        message = temp[1]
         message = message.upper()
         message += ' '*(MAX-(len(message)))
+        print("Odsylam wiadomosc do:",clientName,"\nO tresci:", message)
         fd = os.open(clientName,  O_WRONLY)
         os.write(fd, message.encode())
     closeFifo(serverName)
+    exit(1)
 except Exception as e:
     print(e)
     closeFifo(serverName)
