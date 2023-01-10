@@ -4,7 +4,7 @@
 #include <sys/wait.h>
 #include <stdlib.h>
 int main(){
-        int pid, ppid, uid, gid, i, x, asd;
+    int pid, ppid, uid, gid, i, x, asd;
 	char cmd[40];
 	sprintf(cmd,"pstree -p %d",getpid());
         printf("%-20s%-20s%-20s%-20s\n", "PID", "PPID", "UID", "GID");

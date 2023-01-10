@@ -90,7 +90,7 @@ for i in range(consumer):
         lastPid = pid
 
 try:
-    waitpid(lastPid, 0)
+    waitpid(0, 0)
     close(r)
 except Exception as e:
     print(name+": ", end = "")

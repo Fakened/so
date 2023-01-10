@@ -25,7 +25,7 @@ try:
         mkfifo(serverName, mode=0o0606)
 
     serverFifo = os.open(serverName, O_RDONLY)
-    # sleep(3)
+    sleep(3)
     while True:
         temp = read(serverFifo, MAX)
         if len(temp) == 0:
@@ -43,6 +43,7 @@ try:
         print("Odsylam wiadomosc do:",clientName,"\nO tresci:", message)
         fd = os.open(clientName,  O_WRONLY)
         os.write(fd, message.encode())
+        os.close(fd)
     closeFifo(serverName)
     exit(1)
 except Exception as e:
