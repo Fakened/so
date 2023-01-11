@@ -31,6 +31,7 @@ long int *mem;
 
 int main(int argc, char* argv[])
 {
+    signal(SIGINT, *handler);
     connectSem();
     makeMem();
     conectMem();
@@ -147,4 +148,9 @@ void semafor_v(int nr)
             exit(-1);
         }
     }
+}
+
+void handler(int sig)
+{
+    exit(0);
 }

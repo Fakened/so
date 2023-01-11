@@ -225,5 +225,4 @@ void interuption(){
     }
     closeSemaphores();
     closeMemory();
-    while(wait(&x) > 0);
 }

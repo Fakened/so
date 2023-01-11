@@ -22,6 +22,7 @@ void closeMem(void);
 void connectSem(void);
 void semafor_p(int);
 void semafor_v(int);
+void handler(int);
 int memId;
 key_t memoryKey;
 int semaforId;
@@ -31,6 +32,7 @@ long int *mem;
 
 int main(int argc, char* argv[])
 {
+    signal(SIGINT, *handler);
     connectSem();
     makeMem();
     conectMem();
@@ -136,4 +138,9 @@ void semafor_v(int nr)
             exit(-1);
         }
     }
+}
+
+void handler(int sig)
+{
+    exit(0);
 }
