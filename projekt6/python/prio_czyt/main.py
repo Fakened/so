@@ -1,49 +1,60 @@
 #!/bin/python3
-
+# type: ignore
 import multiprocessing
 from os import getpid, popen, wait
 import random
 import sys
+import signal
 from time import sleep
 space = 0
+processesR = []
+processesW = []
 writerSem = multiprocessing.Semaphore(1)
 readerSem = multiprocessing.Semaphore(1)
 mem = multiprocessing.Value('c')
 lc = multiprocessing.Value('i', 0)
-sp = multiprocessing.Value('i', 0)
 def writer():
     while(1):
         writerSem.acquire()
-        if sp.value - space == 0:
+        if lc.value == 0:
+            # lc.value += space
             print("Writer "+str(getpid())+" come to library")
             mem.value = random.randint(97,122)
             # print("Writer "+str(getpid())+" out of library")
             sleep(0.1)
+            # lc.value -= space
         writerSem.release()
 
 def reader():
     while(1):
         readerSem.acquire()
-        if sp.value - 1 >= 0:
-            sp.value -= 1
+        if lc.value + 1 <= space:
             lc.value += 1
             if lc.value == 1:
                 writerSem.acquire()
             # print("Reader "+str(getpid())+" come to library")
             readerSem.release()
             x = mem.value
-            print("Reader "+str(getpid())+" "+x.decode("utf-8")+ " "+str(sp.value))
+            print("Reader "+str(getpid())+" "+x.decode("utf-8")+ " "+str(lc.value))
             readerSem.acquire()
             # print("Reader "+str(getpid())+" out of library")
             lc.value -= 1
             if lc.value == 0:
                 writerSem.release()
-            sp.value += 1
             sleep(0.1)
         readerSem.release()
 
 
+#------------------------------------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------------------------
+def interruption(signum, frame):
+    for proces in processesR:
+        proces.terminate()
+    for proces in processesW:
+        proces.terminate()
+    exit(0)
 
+signal.signal(signal.SIGINT, interruption)
 
 name = sys.argv[0]
 # print(str(getpid()))
@@ -77,16 +88,18 @@ except Exception as e:
     print(e)
     exit(-1)
 
-# numOfReaders = 1
-# numOfWriters = 1
-sp.value = space
-for i in range(0, numOfReaders):
-    p1 = multiprocessing.Process(target=reader)
-    p1.start()
 
-for i in range(0, numOfWriters):
-    p2 = multiprocessing.Process(target=writer)
-    p2.start()
+
+processesR = [multiprocessing.Process(target=reader) for i in range(numOfReaders)]
+processesW = [multiprocessing.Process(target=writer) for i in range(numOfWriters)]
+
+print(processesW)
+print(processesR)
+
+for proces in processesR:
+    proces.start()
+for proces in processesW:
+    proces.start()
 
 wait()
 
