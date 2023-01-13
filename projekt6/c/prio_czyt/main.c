@@ -82,7 +82,10 @@ int main(int argc, char* argv[]) {
         exit(-1);
     }
     fscanf(pd, "%d", &proceses);
-    pclose(pd);
+    if (pclose(pd) == -1){
+        perror("pclose error");
+        exit(-1);
+    }
     int limit;
     pd = popen("ulimit -p", "r");
     if(pd == NULL){
@@ -90,7 +93,10 @@ int main(int argc, char* argv[]) {
         exit(-1);
     }
     fscanf(pd, "%d", &limit);
-    pclose(pd);
+     if (pclose(pd) == -1){
+        perror("pclose error");
+        exit(-1);
+    }
 
     if( writers + readers + proceses - 4 > limit ){
         perror("Przekroczony limit procesow, operacja niemozliwa\n");

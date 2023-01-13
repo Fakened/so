@@ -22,6 +22,7 @@ void closeMem(void);
 void connectSem(void);
 void semafor_p(int);
 void semafor_v(int);
+void handler(int sig);
 int memId;
 key_t memoryKey;
 int semaforId;
@@ -46,9 +47,9 @@ int main(int argc, char* argv[])
                 semafor_p(SP);
             }
             semafor_v(W);
-            letter =(char)mem[3];
-            printf("Readers %d: %c\n", pid, letter);
-            usleep(10000);
+            letter =(char)mem[2];
+            printf("Reader %d: %c      %i\n", pid, letter, mem[1]);
+            // usleep(10000);
             semafor_p(W);
             mem[1]--;
             if(mem[1] == 0) {
@@ -152,5 +153,6 @@ void semafor_v(int nr)
 
 void handler(int sig)
 {
+    closeMem();
     exit(0);
 }

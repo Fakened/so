@@ -41,10 +41,11 @@ int main(int argc, char* argv[])
     int letter;
     while(1) {
         semafor_p(SP);
-        printf("Pisarz wszedl do biblioteki\n");
+        printf("Pisarz wszedl do biblioteki, %i              %i\n", mem[1], pid);
         letter = (rand()%25)+65;
-        mem[3] = letter;
-        usleep(10000);
+        mem[2] = letter;
+        // sleep(1);
+        // usleep(10000);
         semafor_v(SP);
     }
     closeMem();
@@ -142,5 +143,6 @@ void semafor_v(int nr)
 
 void handler(int sig)
 {
+    closeMem;
     exit(0);
 }
